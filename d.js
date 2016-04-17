@@ -48,13 +48,23 @@
           div.style("display", "inline");
       }
       
-      function mouseMove(x) {
+      function mouseMove(axisObj) {
           
-         var div = d3.select('.tooltip');
-            div.text('event')
-            .style("left", (d3.event.pageX-34) +"px")
-              .style("top", (d3.event.pageY - 12) + "px");
-                   
+          return function() {
+              var toDisplay = '';
+              var originalDate = axisObj.invert(d3.event.pageX - margin.left);
+              var toDisplay = data.filter(function(a) {
+                  if(a.date.getMonth() === originalDate.getMonth() && a.date.getYear() === originalDate.getYear()) {
+                      console.log('hey hi');
+                       var div = d3.select('.tooltip');
+                          div.text(a.date+ ' ' + a.value)
+                          .style("left", (d3.event.pageX-34) +"px")
+                          .style("top", (d3.event.pageY - 12) + "px");
+                    
+                  };
+              });
+           
+          }
      
       }
       
@@ -110,7 +120,7 @@
          .attr("d", area)
          .style("fill", "blue")
           .on("mouseover", mouseOver)
-          .on("mousemove", mouseMove)
+          .on("mousemove", mouseMove(x))
           .on("mouseout", mouseOut);
       
       svg.append("g")
