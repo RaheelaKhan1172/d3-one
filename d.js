@@ -1,4 +1,6 @@
 (function() {
+    'use strict';
+    
   var q = d3_queue.queue();
   console.info(q);
   q.defer(d3.json,'./GDP-data.json');
@@ -51,18 +53,25 @@
       function mouseMove(axisObj) {
           
           return function() {
-              var toDisplay = '';
               var originalDate = axisObj.invert(d3.event.pageX - margin.left);
-              var toDisplay = data.filter(function(a) {
+              var toDisplay = {};
+              
+              toDisplay = data.filter(function(a) {
                   if(a.date.getMonth() === originalDate.getMonth() && a.date.getYear() === originalDate.getYear()) {
-                      console.log('hey hi');
-                       var div = d3.select('.tooltip');
-                          div.text(a.date+ ' ' + a.value)
-                          .style("left", (d3.event.pageX-34) +"px")
-                          .style("top", (d3.event.pageY - 12) + "px");
-                    
+                      return {
+                          date: a.date.getMonth(),
+                          value: a.value
+                      }
                   };
               });
+              console.log(toDisplay);
+               if(toDisplay.length) {
+                    console.log(toDisplay)
+                       var div = d3.select('.tooltip');
+                          div.text(toDisplay[0].date + ' ' + toDisplay[0].value)
+                          .style("left", (d3.event.pageX-34) +"px")
+                          .style("top", (d3.event.pageY - 12) + "px");
+               }
            
           }
      
