@@ -12,6 +12,7 @@
         
         var dataToDisplay = {name: data.source_name, data:[]};
         
+        d3.select('.name').text(dataToDisplay.name);
         
         //closure
         var parseDate = d3.time.format("%Y-%m-%d").parse;
@@ -66,9 +67,23 @@
               });
               console.log(toDisplay);
                if(toDisplay.length) {
-                    console.log(toDisplay)
+                   var date = toDisplay[0].date.toDateString().slice(4,7) + '-' + toDisplay[0].date.toDateString().slice(-4);
+                   console.log(date);
+                   var toDisplayValue = String(toDisplay[0].value);
+                   var val = '';
+                   var ind = toDisplayValue.slice(0,toDisplayValue.indexOf('.'));
+                   if (toDisplayValue) {
+                       if (ind.length <= 3) {
+                           val = toDisplayValue;
+                       } else if (ind.length === 4) {
+                           val = toDisplayValue.slice(0,1) + ',' + toDisplayValue.slice(1);
+                       } else {
+                           val = toDisplayValue.slice(0,2) + ',' + toDisplayValue.slice(2);
+                       }
+                   }
+                   
                        var div = d3.select('.tooltip');
-                          div.text(toDisplay[0].date + ' ' + toDisplay[0].value)
+                         div.html("<h3> $" + val + " Billion</h3><p>" + date +"</p>")
                           .style("left", (d3.event.pageX-34) +"px")
                           .style("top", (d3.event.pageY - 12) + "px");
                }
@@ -113,6 +128,7 @@
       
       
     /***************************************** GRAPH ******************************/  
+      
     var svg = d3.select(".d3stuff").append("svg")
                 .attr("width", margin.width + margin.left + margin.right)
                 .attr("height", margin.height + margin.top + margin.bottom)
@@ -127,7 +143,6 @@
          .datum(data)
          .attr("class", "area")
          .attr("d", area)
-         .style("fill", "blue")
           .on("mouseover", mouseOver)
           .on("mousemove", mouseMove(x))
           .on("mouseout", mouseOut);
@@ -146,7 +161,7 @@
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text("Price($)")
+        .text(dataToDisplay.name)
         .style("fill", "red");
       
         /*********************************** END GRAPH **************************************/
