@@ -161,8 +161,7 @@
         .attr("y", 6)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
-        .text(dataToDisplay.name)
-        .style("fill", "red");
+        .text(dataToDisplay.name);
       
         /*********************************** END GRAPH **************************************/
   }   
